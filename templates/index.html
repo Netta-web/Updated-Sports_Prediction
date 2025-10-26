@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Rating Prediction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a0a3e 50%, #0f0a2e 100%);
+      color: #00ffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* <CHANGE> Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* <CHANGE> Scanlines effect */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .container {
+      position: relative;
+      z-index: 3;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    /* <CHANGE> Retro header with neon glow */
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #ff00ff;
+      text-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff,
+        0 0 30px #ff00ff,
+        0 0 40px #ff00ff;
+      animation: glow 2s ease-in-out infinite;
+      letter-spacing: 2px;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 
+          0 0 10px #ff00ff,
+          0 0 20px #ff00ff,
+          0 0 30px #ff00ff,
+          0 0 40px #ff00ff;
+      }
+      50% {
+        text-shadow: 
+          0 0 20px #ff00ff,
+          0 0 30px #ff00ff,
+          0 0 40px #ff00ff,
+          0 0 50px #ff00ff,
+          0 0 60px #ff00ff;
+      }
+    }
+
+    /* <CHANGE> Retro form styling with neon border */
+    form {
+      background: rgba(10, 14, 39, 0.8);
+      border: 3px solid #00ffff;
+      padding: 30px;
+      box-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        inset 0 0 10px rgba(0, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.7rem;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+      letter-spacing: 1px;
+    }
+
+    /* <CHANGE> Neon input fields */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 2px solid #ff00ff;
+      color: #00ffff;
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      box-shadow: 
+        0 0 5px #ff00ff,
+        inset 0 0 5px rgba(255, 0, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00ffff;
+      box-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        inset 0 0 10px rgba(0, 255, 255, 0.2);
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    input::placeholder {
+      color: rgba(0, 255, 255, 0.5);
+    }
+
+    /* <CHANGE> Neon button with glow effect */
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      color: #0a0e27;
+      border: 2px solid #ff00ff;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      box-shadow: 
+        0 0 20px #ff00ff,
+        0 0 30px #ff00ff,
+        0 0 40px #ff00ff;
+      transform: scale(1.02);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* <CHANGE> Retro prediction display */
+    .prediction {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(255, 0, 255, 0.1);
+      border: 2px solid #ff00ff;
+      color: #00ffff;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      text-align: center;
+      box-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* <CHANGE> Retro note styling */
+    .note {
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      text-align: center;
+    }
+
+    .note strong {
+      color: #ff00ff;
+      text-shadow: 0 0 5px #ff00ff;
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+      }
+
+      form {
+        padding: 20px;
+      }
+
+      label {
+        font-size: 0.6rem;
+      }
+
+      button {
+        font-size: 0.7rem;
+      }
+
+      .prediction {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚽ PLAYER RATING</h1>
+
+    <form action="/predict" method="post">
+      <label title="How quickly a player responds to events (0–99)">
+        Reactions (0–99):
+      </label>
+      <input type="number" name="reactions" min="0" max="99" required>
+
+      <label title="Player's predicted career ceiling (0–99)">
+        Potential (0–99):
+      </label>
+      <input type="number" name="potential" min="0" max="99" required>
+
+      <label title="Ability to accurately make short passes (0–99)">
+        Short Passing (0–99):
+      </label>
+      <input type="number" name="short_passing" min="0" max="99" required>
+
+      <label title="Ability to see and make smart offensive plays (0–99)">
+        Vision (0–99):
+      </label>
+      <input type="number" name="vision" min="0" max="99" required>
+
+      <label title="Reputation level from 1 (local) to 5 (world-class)">
+        International Reputation (1–5):
+      </label>
+      <input type="number" name="international_reputation" min="1" max="5" required>
+
+      <button type="submit">PREDICT RATING</button>
+    </form>
+
+    {% if prediction_text %}
+      <div class="prediction">{{ prediction_text }}</div>
+    {% endif %}
+
+    <p class="note">
+      <strong>NOTE:</strong> The predicted overall rating ranges from 0 to 99, reflecting the player's general skill level based on the provided attributes.
+    </p>
+  </div>
+</body>
+</html>
