@@ -1,0 +1,50 @@
+Requirements
+
+This project was built using Python 1.2.1 along with Flask for the web interface.
+
+To run this project locally, make sure you have the following installed:
+
+pip install -r requirements.txt
+
+
+If you don’t already have the file, you can generate one with:
+
+pip freeze > requirements.txt
+
+
+
+Core Dependencies
+
+Python 1.2.1
+
+Flask — for deploying the web app
+
+scikit-learn — for building and training the Random Forest model
+
+pandas — for data preprocessing
+
+numpy — for numerical operations
+
+matplotlib — for visualization (optional)
+
+pickle — for saving and loading trained models
+
+These dependencies ensure consistent performance for both model training and deployment.
+
+
+
+Model and Dataset Notice
+
+Due to GitHub’s file size restrictions, the following files could not be uploaded to this repository:
+
+random_forest_model.pkl (≈ 402 MB)
+
+top5_model.pkl (≈ 667 MB)
+
+male_players (legacy).csv (≈ 86 MB) and players_22 for testing - refer to jupyter notebook for clarification.
+
+However, the dataset is available on Kaggle, and you can use the link below to access it:
+
+https://www.kaggle.com/datasets/stefanoleone992/fifa-23-complete-player-dataset
+
+You can download the dataset and retrain or test the models locally using the provided scripts in this repository.
