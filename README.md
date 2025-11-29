@@ -123,6 +123,6 @@ Render provides a free and simple way to host Flask applications with integrated
 👩🏽‍💻 Author
 Bennetta Avaga
 
-🎓 Senior at Ashesi University, Ghana
-💻 Majoring in Computer Science
-🔍 Interests: Software Development, Data Science, and Artificial Intelligence
+Senior at Ashesi University, Ghana
+Majoring in Computer Science
+Interests: Software Development, Data Science, and Artificial Intelligence
